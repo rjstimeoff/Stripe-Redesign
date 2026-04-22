@@ -13,18 +13,17 @@ const videos = [
   "/videos/stripevid7.mp4",
 ];
 
-const logos = [
-  { src: "/logos/openai_wordmark_light.svg", alt: "OpenAI" },
-  { src: "/logos/figma.svg", alt: "Figma" },
-  { src: "/logos/vercel_wordmark.svg", alt: "Vercel" },
-  { src: "/logos/uber_light.svg", alt: "Uber" },
-  { src: "/logos/anthropic_black_wordmark.svg", alt: "Anthropic" },
-  { src: "/logos/cursor_wordmark_light.svg", alt: "Cursor" },
-  { src: "/logos/aws_light.svg", alt: "AWS" },
-  { src: "/logos/nvidia-wordmark-light.svg", alt: "NVIDIA" },
-  { src: "/logos/coinbase-wordmark-light.svg", alt: "Coinbase" },
-  { src: "/logos/google-wordmark.svg", alt: "Google" },
-  { src: "/logos/shopify-wordmark-light.svg", alt: "Shopify" },
+const logos: { src: string; alt: string; style: React.CSSProperties; className?: string }[] = [
+  { src: "/logos/openai_wordmark_light.svg",     alt: "OpenAI",    style: { height: 29 } },
+  { src: "/logos/figma.svg",                     alt: "Figma",     style: { height: 36, width: 24 }, className: "" },
+  { src: "/logos/vercel_wordmark.svg",           alt: "Vercel",    style: { height: 22 } },
+  { src: "/logos/uber_light.svg",                alt: "Uber",      style: { height: 22 } },
+  { src: "/logos/anthropic_black_wordmark.svg",  alt: "Anthropic", style: { height: 20 } },
+  { src: "/logos/cursor_wordmark_light.svg",     alt: "Cursor",    style: { height: 22, maxWidth: 100 } },
+  { src: "/logos/aws_light.svg",                 alt: "AWS",       style: { height: 32 } },
+  { src: "/logos/nvidia-wordmark-light.svg",     alt: "NVIDIA",    style: { height: 23 } },
+  { src: "/logos/google-wordmark.svg",           alt: "Google",    style: { height: 34 } },
+  { src: "/logos/shopify-wordmark-light.svg",    alt: "Shopify",   style: { height: 28 } },
 ];
 
 export default function Hero() {
@@ -99,7 +98,8 @@ export default function Hero() {
 
       {/* Trusted by — bottom right */}
       <div className="absolute bottom-16 right-12 z-10 text-right">
-        <p className="text-white/40 text-xs uppercase tracking-widest mb-2">Trusted by</p>
+        <p className="text-white/40 text-[13px] uppercase tracking-widest mb-2 text-center">Trusted by</p>
+        <div className="h-10 w-44 flex items-center justify-center">
         <AnimatePresence mode="wait">
           <motion.img
             key={logoIndex}
@@ -109,9 +109,11 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.4 }}
-            className="h-6 w-auto max-w-[160px] brightness-0 invert ml-auto"
+            className={logos[logoIndex].className !== undefined ? logos[logoIndex].className : "brightness-0 invert"}
+            style={{ width: "auto", ...logos[logoIndex].style }}
           />
         </AnimatePresence>
+        </div>
       </div>
     </section>
   );
