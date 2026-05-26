@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3000"),
+  metadataBase: new URL("https://stripe-redesign.vercel.app"),
   title: "Stripe redesign — RJ Rivera",
   description:
     "A speculative redesign of stripe.com by RJ Rivera. Editorial, image-led, built to convert.",
