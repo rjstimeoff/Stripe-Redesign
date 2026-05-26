@@ -27,25 +27,41 @@ const logos: { src: string; alt: string; style: React.CSSProperties; className?:
 ];
 
 export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const aRef = useRef<HTMLVideoElement>(null);
+  const bRef = useRef<HTMLVideoElement>(null);
+  const [aSrc, setASrc] = useState(videos[0]);
+  const [bSrc, setBSrc] = useState(videos[1 % videos.length]);
+  const [active, setActive] = useState<"a" | "b">("a");
+  const idxRef = useRef({ a: 0, b: 1 % videos.length });
   const [logoIndex, setLogoIndex] = useState(0);
 
-
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    const handleEnded = () => setCurrentIndex((prev) => (prev + 1) % videos.length);
-    video.addEventListener("ended", handleEnded);
-    return () => video.removeEventListener("ended", handleEnded);
+    aRef.current?.play().catch(() => {});
   }, []);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.load();
-    video.play().catch(() => {});
-  }, [currentIndex]);
+    const el = active === "a" ? aRef.current : bRef.current;
+    if (!el) return;
+
+    const onEnded = () => {
+      const finishing = active;
+      const nextSlot = active === "a" ? "b" : "a";
+      const nextEl = nextSlot === "a" ? aRef.current : bRef.current;
+
+      nextEl?.play().catch(() => {});
+      setActive(nextSlot);
+
+      const newClipIdx = (idxRef.current[nextSlot] + 1) % videos.length;
+      window.setTimeout(() => {
+        idxRef.current[finishing] = newClipIdx;
+        if (finishing === "a") setASrc(videos[newClipIdx]);
+        else setBSrc(videos[newClipIdx]);
+      }, 300);
+    };
+
+    el.addEventListener("ended", onEnded);
+    return () => el.removeEventListener("ended", onEnded);
+  }, [active]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -56,19 +72,31 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-screen flex flex-col justify-end px-12 pb-16 overflow-hidden">
-      {/* Video background */}
+      {/* Crossfading background videos */}
       <video
-        ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover"
-        autoPlay
+        ref={aRef}
+        src={aSrc}
         muted
         playsInline
-      >
-        <source src={videos[currentIndex]} type="video/mp4" />
-      </video>
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ opacity: active === "a" ? 1 : 0, transition: "opacity 0.3s ease-in-out" }}
+      />
+      <video
+        ref={bRef}
+        src={bSrc}
+        muted
+        playsInline
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ opacity: active === "b" ? 1 : 0, transition: "opacity 0.3s ease-in-out" }}
+      />
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50" />
+      {/* Overlay - fades out in the bottom 30% so the white can blend cleanly */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/50 to-black/0 [--tw-gradient-via-position:70%]" />
+
+      {/* Fade to next section */}
+      <div className="absolute bottom-0 left-0 right-0 h-[131px] bg-gradient-to-b from-[#f8f7f4]/0 via-[#f8f7f4]/30 to-[#f8f7f4] z-10 pointer-events-none" />
 
       {/* Content */}
       <motion.div

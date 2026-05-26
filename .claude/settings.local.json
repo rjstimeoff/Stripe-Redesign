@@ -9,7 +9,16 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(git branch *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(node *)",
+      "Bash(npx tsc *)",
+      "Bash(git *)",
+      "Bash(xargs ls *)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(sips *)",
+      "Bash(magick *)",
+      "Bash(python3 *)",
+      "Bash(convert -version)"
     ]
   }
 }
