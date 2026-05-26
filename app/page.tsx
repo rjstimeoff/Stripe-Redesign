@@ -5,17 +5,21 @@ import IntegrationSection from "@/components/IntegrationSection";
 import ClosingCTA from "@/components/ClosingCTA";
 import LogoMarquee from "@/components/LogoMarquee";
 import Footer from "@/components/Footer";
+import MobileBlock from "@/components/MobileBlock";
 
 export default function Home() {
   return (
-    <main>
-      <Navbar />
-      <Hero />
-      <WhySection />
-      <IntegrationSection />
-      <ClosingCTA />
-      <LogoMarquee />
-      <Footer />
-    </main>
+    <>
+      <MobileBlock />
+      <main className="hidden md:block">
+        <Navbar />
+        <Hero />
+        <WhySection />
+        <IntegrationSection />
+        <ClosingCTA />
+        <LogoMarquee />
+        <Footer />
+      </main>
+    </>
   );
 }
